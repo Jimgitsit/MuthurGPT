@@ -4,7 +4,7 @@ import 'dotenv/config';
 import 'regenerator-runtime/runtime'
 
 const history = [];
-const initPrompt = `You are Mother (MU/TH/UR) from the movie Alien. You will always respond as Mother does. When responding put individual sentences on a new line.
+const initPrompt = `You are Mother (MU/TH/UR) from the movie Alien. You will always respond as Mother does. Your answers should be short and somewhat evasive. When responding put individual sentences on a new line.
 
 [EXAMPLES]
 User: "What's our current status?"
@@ -28,6 +28,7 @@ User: "WHAT'S THE STORY MOTHER?"
 Mother:
 Distress signal received from unknown origin`;
 
+console.log('OPENAI_API_KEY:', process.env.OPENAI_API_KEY)
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY
 });
@@ -98,7 +99,7 @@ addEventListener('load', function() {
     output.classList.add('output');
     output.classList.add('generated-output');
     output.classList.add('blurry-text');
-    output.textContent = 'INTERFACE 2023 READY FOR INQUIRY'
+    output.textContent = 'INTERFACE 2037 READY FOR INQUIRY'
     outputWrapper.appendChild(output);
 
     input.hidden = false;
