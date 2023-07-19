@@ -1,0 +1,97 @@
+body {
+  background-color: #000000;
+}
+
+#muthur-interface {
+  width: 80%;
+  height: 85vh;
+  margin: 40px auto;
+  border: 1px solid green;
+  border-radius: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow: auto;
+  background-image: url(../res/scanlines.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  box-shadow: 0px 0px 5px #12b853, 0 0 10px #12b853;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+#muthur-interface::-webkit-scrollbar {
+  display: none;
+}
+
+#input, .output {
+  font-family: 'Funtauna', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 14px;
+  color: #00ff00;
+}
+
+.blurry-text {
+  text-shadow: 0 0 3px #00ff00;
+}
+
+.generated-output {
+  text-decoration: underline;
+  padding-bottom: 12px;
+}
+
+#input {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  margin: 0 0 0 -2px;
+}
+
+.flash-container {
+  position: relative;
+  height: 20px;
+  margin-bottom: -15px;
+}
+
+.flash {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: #e5ffe5;
+  box-shadow: 0px 0px 10px #00ff00, 0px 0px 20px #00ff00, 0px 0px 30px #00ff00;
+  height: 7px;
+  width: 0%;
+  animation: flash 0.25s;
+  border-radius: 100px/5px;
+}
+
+.letter-flash {
+  color: #feff00;
+  text-shadow: 0 0 5px #feff00;
+  background: #00ff00b8;
+  box-shadow: 0px 0px 10px #00ff00, 0px 0px 20px #00ff00, 0px 0px 30px #00ff00;
+  border-radius: 3px;
+}
+
+@font-face {
+  font-family: 'Funtauna';
+  src: url('../res/Funtauna-h3YJA1n-g2.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@keyframes flash {
+  0% {
+    width: 0%;
+  }
+  50% {
+    width: 50%;
+    right: 50%;
+  }
+  100% {
+    width: 0%;
+    right: 100%;
+  }
+}
