@@ -127,18 +127,23 @@ input.addEventListener('keydown', async function(event) {
       const interLineDelay = Math.floor(Math.random() * (1000 - 250 + 1) + 250);
       prevDelay = ((line.length - 1) * charDelay) + interLineDelay;
       setTimeout(() => {
-        // Do flash animation
-        input.hidden = true;
-        // <div className="flash-container"><span className="flash"></span></div>
-        let flash = document.createElement('div');
-        flash.classList.add('flash-container');
-        flash.innerHTML = '<span class="flash">'
-        outputWrapper.appendChild(flash);
+        let flash = null;
+        if (line.length > 0) {
+          // Do flash animation
+          input.hidden = true;
+          // <div className="flash-container"><span className="flash"></span></div>
+          let flash = document.createElement('div');
+          flash.classList.add('flash-container');
+          flash.innerHTML = '<span class="flash">'
+          outputWrapper.appendChild(flash);
+        }
 
         muthur.scrollTop = muthur.scrollHeight;
 
         setTimeout(function () {
-          outputWrapper.removeChild(flash);
+          if (flash) {
+            outputWrapper.removeChild(flash);
+          }
 
           // Add output
           // <div className="output generated-output blurry-text"><span className="text">asdfasdf</span><span className="letter-flash">E</span></div>
