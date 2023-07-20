@@ -3,6 +3,7 @@
 <head>
   <title>MUTHUR</title>
   <link rel="icon" href="favicon.ico" />
+  <meta name="viewport" content="width=device-width, user-scalable=no">
   <link rel="stylesheet" type="text/css" href="css/styles.css">
   <link rel="stylesheet" type="text/css" href="css/crt.css">
 </head>
@@ -11,9 +12,11 @@
 <audio id="beep-system" src="res/beep-system.mp3"></audio>
 <audio id="beep-user" src="res/beep-user.mp3"></audio>
 <audio id="typing" src="res/typing.mp3"></audio>
-<div id="muthur-interface" class="crt">
-  <div id="output-wrapper"></div>
-  <input id="input" type="text" class="blurry-text" autofocus/>
+<div id="muthur-interface-wrapper">
+  <div id="muthur-interface" class="crt">
+    <div id="output-wrapper"></div>
+    <input id="input" type="text" class="blurry-text" autofocus/>
+  </div>
 </div>
 <script src="js/script.js"></script>
 </body>
