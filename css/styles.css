@@ -2,15 +2,6 @@ body {
   background-color: #000000;
 }
 
-#muthur-interface-wrapper {
-  position: fixed;
-  width: 90%;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-}
-
 #muthur-interface {
   width: 80%;
   height: 85vh;
@@ -99,11 +90,10 @@ span.text:empty:before {
 @media screen and (max-device-width:640px), screen and (max-width:640px) {
   #muthur-interface {
     width: 90%;
-    height: 90vh;
   }
 
   #input, .output {
-    font-size: 22px;
+    font-size: 18px;
   }
 }
 
