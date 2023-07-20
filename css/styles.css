@@ -87,6 +87,17 @@ span.text:empty:before {
   border-radius: 3px;
 }
 
+@media screen and (max-device-width:640px), screen and (max-width:640px) {
+  #muthur-interface {
+    width: 90%;
+    height: 90vh;
+  }
+
+  #input, .output {
+    font-size: 22px;
+  }
+}
+
 @font-face {
   font-family: 'Funtauna';
   src: url('../res/Funtauna-h3YJA1n-g2.otf') format('opentype');
