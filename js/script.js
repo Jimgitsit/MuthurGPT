@@ -31,6 +31,8 @@ const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY
 });
 
+delete configuration.baseOptions.headers['User-Agent'];
+
 const openai = new OpenAIApi(configuration);
 const gptModel = "gpt-3.5-turbo";
 
@@ -132,16 +134,15 @@ input.addEventListener('keydown', async function(event) {
           // Do flash animation
           input.hidden = true;
           // <div className="flash-container"><span className="flash"></span></div>
-          let flash = document.createElement('div');
+          flash = document.createElement('div');
           flash.classList.add('flash-container');
           flash.innerHTML = '<span class="flash">'
           outputWrapper.appendChild(flash);
         }
 
         muthur.scrollTop = muthur.scrollHeight;
-
         setTimeout(function () {
-          if (flash) {
+          if (flash !== null) {
             outputWrapper.removeChild(flash);
           }
 
@@ -181,9 +182,7 @@ const getCompletion = async (newPrompt) => {
   const messages = [];
 
   messages.push({ role: "system", content: initPrompt });
-  console.log('history: ', history);
   for (const [prompt, completion] of history) {
-    console.log('prompt: ', prompt, 'completion: ', completion);
     messages.push({ role: "user", content: prompt });
     messages.push({ role: "assistant", content: completion });
   }
