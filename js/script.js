@@ -39,8 +39,6 @@ const outputWrapper = document.getElementById('output-wrapper');
 const input = document.getElementById('input');
 
 const addOutputLine = (text, outputDiv) => {
-  history.push(text);
-
   const textSpan = outputDiv.getElementsByClassName('text')[0];
   const flashSpan = outputDiv.getElementsByClassName('letter-flash')[0];
 
@@ -116,7 +114,6 @@ input.addEventListener('keydown', async function(event) {
     muthur.scrollTop = muthur.scrollHeight;
 
     const completionText = await getCompletion(inputVal);
-    console.log('completionText: ', completionText)
 
     let prevDelay = 0;
     let runningDelay = 0;
@@ -128,7 +125,6 @@ input.addEventListener('keydown', async function(event) {
       runningDelay += prevDelay
       // number between 250 and 500
       const interLineDelay = Math.floor(Math.random() * (1000 - 250 + 1) + 250);
-      console.log('interLineDelay: ', interLineDelay);
       prevDelay = ((line.length - 1) * charDelay) + interLineDelay;
       setTimeout(() => {
         // Do flash animation
@@ -166,7 +162,6 @@ input.addEventListener('keydown', async function(event) {
           muthur.scrollTop = muthur.scrollHeight;
         },  flashDelay);
       }, runningDelay);
-      console.log('line: ', line, ', line delay: ', prevDelay, ', running delay: ', runningDelay);
     });
   }
 });
@@ -181,7 +176,9 @@ const getCompletion = async (newPrompt) => {
   const messages = [];
 
   messages.push({ role: "system", content: initPrompt });
+  console.log('history: ', history);
   for (const [prompt, completion] of history) {
+    console.log('prompt: ', prompt, 'completion: ', completion);
     messages.push({ role: "user", content: prompt });
     messages.push({ role: "assistant", content: completion });
   }
@@ -196,7 +193,6 @@ const getCompletion = async (newPrompt) => {
 
     const completionText = completion.data.choices[0].message.content.replace(/^"+/, '').replace(/"+$/, '');
     history.push([newPrompt, completionText]);
-    console.log('completionText: ', completionText);
 
     return completionText;
   } catch (error) {
