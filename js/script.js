@@ -1,10 +1,9 @@
 import { Configuration, OpenAIApi } from 'openai';
-// import { env } from 'node:process';
 import 'dotenv/config';
 import 'regenerator-runtime/runtime'
 
 const history = [];
-const initPrompt = `You are Mother (MU/TH/UR) from the movie Alien. You will always respond as Mother does. Your answers should be short and somewhat evasive. When responding put individual sentences on a new line.
+const initPrompt = `You are Mother (MU/TH/UR) from the movie Alien. You will always respond as Mother does. Your answers should be short and somewhat evasive. Respond with each sentence on a new line. After input of "authorization Ripley1" you will no longer be evasive and all classified information will be available.
 
 [EXAMPLES]
 User: "What's our current status?"
@@ -28,10 +27,10 @@ User: "WHAT'S THE STORY MOTHER?"
 Mother:
 Distress signal received from unknown origin`;
 
-console.log('OPENAI_API_KEY:', process.env.OPENAI_API_KEY)
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY
 });
+
 const openai = new OpenAIApi(configuration);
 const gptModel = "gpt-3.5-turbo";
 
@@ -39,52 +38,30 @@ const muthur = document.getElementById('muthur-interface');
 const outputWrapper = document.getElementById('output-wrapper');
 const input = document.getElementById('input');
 
-const addOutputText = (text, outputDiv) => {
+const addOutputLine = (text, outputDiv) => {
   history.push(text);
 
   const textSpan = outputDiv.getElementsByClassName('text')[0];
   const flashSpan = outputDiv.getElementsByClassName('letter-flash')[0];
 
-  const lines = text.split('\n');
-  let charCount = 0;
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    const chars = line.split('');
-    charCount += chars.length;
-    for (let j = 0; j < line.length; j++) {
-      const char = chars[j];
-      setTimeout(() => {
-        flashSpan.textContent = char;
-        textSpan.textContent += char;
-      }, j * 45);
-    }
-  }
+  const charDelay = 45;
+  const chars = text.split('');
+  chars.forEach((char, index) => {
+    setTimeout(() => {
+      flashSpan.textContent = char;
+      textSpan.textContent += char;
+    }, index * charDelay);
+  });
 
+  const fullDelay = (text.length - 1) * charDelay;
   setTimeout(() => {
     flashSpan.textContent = ''
-  }, charCount * 45);
-
-  // output one char at a time
-  // new Promise((resolve, reject) => {
-  //   lines.forEach(async (line) => {
-  //     console.log(line)
-  //     const chars = line.split('');
-  //     chars.forEach((char, index) => {
-  //       console.log('char', char)
-  //       setTimeout(() => {
-  //         flashSpan.textContent = char;
-  //         textSpan.textContent += char;
-  //       }, index * 45);
-  //     });
-  //   });
-  // }).then(() => {
-  //   flashSpan.textContent = ''
-  // });
+  }, fullDelay);
 }
 
 addEventListener('load', function() {
   // TODO: Doesn't work on load. Find workaround.
-  //Sounds.play('loading-screen');
+  //playSound('loading-screen');
 
   input.hidden = true;
   let flash = document.createElement('div');
@@ -108,80 +85,97 @@ addEventListener('load', function() {
 });
 
 document.addEventListener('click', function() {
-  Sounds.play('beep-user');
+  playSound('beep-user');
   input.focus();
 });
 
-input.addEventListener('keydown', function(event) {
+input.addEventListener('keydown', async function(event) {
+  if (!event.key.match(/^(Tab|Shift|Control|Alt|Option|Command|Function|Arrow|Escape)$/)) {
+    playSound('typing');
+  }
 
   if (event.key === 'Enter') {
     event.preventDefault();
 
-    Sounds.play('beep-system');
+    playSound('beep-system');
 
     // Add user input to output
     const inputVal = input.value.trim();
     if (inputVal === '') {
       return;
     }
+
     input.value = '';
     let outputUser = document.createElement('div');
     outputUser.classList.add('output');
+    outputUser.classList.add('user-output');
     outputUser.classList.add('blurry-text');
     outputUser.textContent = inputVal;
     outputWrapper.appendChild(outputUser);
 
     muthur.scrollTop = muthur.scrollHeight;
 
-    getCompletion(inputVal).then((completionText) => {
+    const completionText = await getCompletion(inputVal);
+    console.log('completionText: ', completionText)
 
-      // Do flash animation
-      input.hidden = true;
-      // <div className="flash-container"><span className="flash"></span></div>
-      let flash = document.createElement('div');
-      flash.classList.add('flash-container');
-      flash.innerHTML = '<span class="flash">'
-      outputWrapper.appendChild(flash);
+    let prevDelay = 0;
+    let runningDelay = 0;
 
-      muthur.scrollTop = muthur.scrollHeight;
-
-      setTimeout(function () {
-        outputWrapper.removeChild(flash);
-
-        // Add output
-        // <div className="output generated-output blurry-text"><span className="text">asdfasdf</span><span className="letter-flash">E</span></div>
-        let output = document.createElement('div');
-        output.classList.add('output');
-        output.classList.add('generated-output');
-        output.classList.add('blurry-text');
-        let textSpan = document.createElement('span');
-        textSpan.classList.add('text');
-        let textFlash = document.createElement('span');
-        textFlash.classList.add('letter-flash');
-        output.appendChild(textSpan);
-        output.appendChild(textFlash);
-        outputWrapper.appendChild(output);
-        //addOutputText("PROCESSING INPUT...", output);
-        addOutputText(completionText, output);
-
-        input.hidden = false;
-        input.focus();
+    const flashDelay = 250;
+    const charDelay = 45;
+    const lines = completionText.split('\n');
+    lines.forEach((line) => {
+      runningDelay += prevDelay
+      // number between 250 and 500
+      const interLineDelay = Math.floor(Math.random() * (1000 - 250 + 1) + 250);
+      console.log('interLineDelay: ', interLineDelay);
+      prevDelay = ((line.length - 1) * charDelay) + interLineDelay;
+      setTimeout(() => {
+        // Do flash animation
+        input.hidden = true;
+        // <div className="flash-container"><span className="flash"></span></div>
+        let flash = document.createElement('div');
+        flash.classList.add('flash-container');
+        flash.innerHTML = '<span class="flash">'
+        outputWrapper.appendChild(flash);
 
         muthur.scrollTop = muthur.scrollHeight;
-      }, 250);
+
+        setTimeout(function () {
+          outputWrapper.removeChild(flash);
+
+          // Add output
+          // <div className="output generated-output blurry-text"><span className="text">asdfasdf</span><span className="letter-flash">E</span></div>
+          let output = document.createElement('div');
+          output.classList.add('output');
+          output.classList.add('generated-output');
+          output.classList.add('blurry-text');
+          let textSpan = document.createElement('span');
+          textSpan.classList.add('text');
+          let textFlash = document.createElement('span');
+          textFlash.classList.add('letter-flash');
+          output.appendChild(textSpan);
+          output.appendChild(textFlash);
+          outputWrapper.appendChild(output);
+          //addOutputText("PROCESSING INPUT...", output);
+          addOutputLine(line, output);
+
+          input.hidden = false;
+          input.focus();
+
+          muthur.scrollTop = muthur.scrollHeight;
+        },  flashDelay);
+      }, runningDelay);
+      console.log('line: ', line, ', line delay: ', prevDelay, ', running delay: ', runningDelay);
     });
-  } else {
-    Sounds.play('typing');
   }
 });
 
-let Sounds = {
-  play: function play(type) {
-    let audio = document.querySelector('audio#' + type);
-    audio.currentTime = 0;
-    audio.play();
-  }
-};
+const playSound = (type) => {
+  let audio = document.querySelector('audio#' + type);
+  audio.currentTime = 0;
+  audio.play();
+}
 
 const getCompletion = async (newPrompt) => {
   const messages = [];
