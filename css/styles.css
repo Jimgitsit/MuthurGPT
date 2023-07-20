@@ -89,11 +89,13 @@ span.text:empty:before {
 
 @media screen and (max-device-width:640px), screen and (max-width:640px) {
   #muthur-interface {
-    width: 90%;
+    width: 95%;
+    /*height: 85vh;*/
+    margin: 20px auto;
   }
 
   #input, .output {
-    font-size: 18px;
+    font-size: 16px;
   }
 }
 
