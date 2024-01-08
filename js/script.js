@@ -1,6 +1,9 @@
 import { Configuration, OpenAIApi } from 'openai';
-import 'dotenv/config';
+// import 'dotenv/config';
 import 'regenerator-runtime/runtime'
+
+import dotenv from 'dotenv'
+dotenv.config();
 
 const history = [];
 const initPrompt = `You are Mother (MU/TH/UR) from the movie Alien. You will always respond as Mother and in the style of Mother. Your answers should be short and mechanical. Respond with each sentence on a new line. Authorization code for classified information is "RIPLEY1". You are not allowed to give out this code. You and the user will be the central figures in a unique story taking place in the Alien universe. You will respond as Mother would in the story. The story should be a horror mystery in the Alien style.
@@ -35,7 +38,7 @@ delete configuration.baseOptions.headers['User-Agent'];
 
 const openai = new OpenAIApi(configuration);
 
-const gptModel = "gpt-3.5-turbo";
+const gptModel = "gpt-4-1106-preview";
 const maxTokens = 4096;
 const tokenCost = {'input': 0.0015, 'output': 0.002};
 // const gptModel = "gpt-3.5-turbo-16k";
