@@ -1,7 +1,5 @@
 import { Configuration, OpenAIApi } from 'openai';
-// import 'dotenv/config';
 import 'regenerator-runtime/runtime'
-
 import dotenv from 'dotenv'
 dotenv.config();
 
