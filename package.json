@@ -6,14 +6,16 @@
   "scripts": {
     "build": "parcel build index.html",
     "dev": "parcel index.html --open",
-    "start": "npm run build && npm run dev",
+    "start": "parcel --port 3000 index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "dotenv": "^16.3.1",
     "openai": "^3.3.0",
-    "regenerator-runtime": "^0.13.11"
+    "regenerator-runtime": "^0.13.11",
+    "parcel-bundler": "^1.12.4"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.12.4"
+    "@flydotio/dockerfile": "^0.5.0"
   }
 }
